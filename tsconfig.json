@@ -3,7 +3,7 @@
   "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
   "types": ["vite-plugin-svgr/client", "./src/vite-env.d.ts"],
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"],
       "@assets/*": ["./src/assets/*"],

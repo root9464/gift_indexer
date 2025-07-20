@@ -11,8 +11,6 @@
     "ui::add": "bunx --bun shadcn@latest add"
   },
   "dependencies": {
-    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
-    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@hookform/resolvers": "^5.1.1",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-dropdown-menu": "^2.1.15",
@@ -44,6 +42,7 @@
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.11",
     "vaul": "^1.1.2",
+    "vite-plugin-node-polyfills": "^0.24.0",
     "zod": "^4.0.5"
   },
   "devDependencies": {

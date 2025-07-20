@@ -1,11 +1,10 @@
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
 import svgr from '@svgr/rollup';
 import tailwindcss from '@tailwindcss/vite';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 import { defineConfig } from 'vite';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 export default defineConfig({
   plugins: [
@@ -15,9 +14,8 @@ export default defineConfig({
       target: 'react',
       autoCodeSplitting: true,
     }),
-    NodeGlobalsPolyfillPlugin({
-      buffer: true,
-      process: true,
+    nodePolyfills({
+      include: ['buffer'],
     }),
     svgr({
       include: '**/*.svg',
@@ -41,21 +39,6 @@ export default defineConfig({
   server: {
     port: 8097,
     host: '0.0.0.0',
-  },
-
-  optimizeDeps: {
-    esbuildOptions: {
-      define: {
-        global: 'globalThis',
-      },
-      plugins: [
-        NodeGlobalsPolyfillPlugin({
-          buffer: true,
-          process: true,
-        }),
-        NodeModulesPolyfillPlugin(),
-      ],
-    },
   },
 
   resolve: {

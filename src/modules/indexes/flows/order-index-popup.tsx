@@ -24,7 +24,7 @@ export function OrderIndexPopup({ trigger }: OrderIndexPopupProps) {
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
       <DrawerContent className='mx-auto mb-[55px] min-h-[634px] w-full max-w-[430px] rounded-t-2xl bg-white p-4 pb-4' swipeable={false}>
         <OrderIndexHeader price={804.2} change={-9.0} lastPrice={504.2} />
-        <div className='flex flex-col gap-5'>
+        <div className='flex flex-col gap-2'>
           <div className='flex h-fit w-full flex-col gap-2'>
             <div className='mb-2 ml-3 text-xs text-gray-500'>Price Dynamic</div>
             <OrderChartWithTimeFrame initialData={ChartDataMock} Chart={OrderChart} />

@@ -118,6 +118,7 @@
   body {
     @apply bg-background text-foreground relative min-h-screen h-full w-full no-underline;
   }
+
 }
 
 @layer utilities {

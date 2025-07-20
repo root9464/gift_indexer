@@ -3,7 +3,6 @@ import { cn } from '@/shared/lib/utils';
 import { copyClipboard } from '@/shared/utils/utils';
 import { ReactComponent as CopyIcon } from '@assets/svg/copy-icon.svg';
 import { ReactComponent as DisconectIcon } from '@assets/svg/disconect-icon.svg';
-import { ReactComponent as WalletIcon } from '@assets/svg/wallet-icon.svg';
 import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
 import { Button } from '../ui/button';
 
@@ -14,7 +13,7 @@ export const WalletMenu = () => {
   const connectWallet = () => tonConnectUI.openModal();
   const disconnectWallet = () => tonConnectUI.disconnect();
 
-  const shortAddress = address.slice(0, 3) + '...' + address.slice(-2);
+  const shortAddress = address.slice(0, 5) + '...' + address.slice(-4);
   const longAddress = address.slice(0, 10) + '...' + address.slice(-10);
 
   return (
@@ -25,7 +24,7 @@ export const WalletMenu = () => {
             <Button
               variant='outline'
               className={cn(
-                'inline-flex h-[38px] w-[72px] items-center justify-center rounded-2xl',
+                'inline-flex h-[38px] w-fit items-center justify-center rounded-2xl',
                 'border border-green-300 bg-white px-3 py-4 text-green-500 shadow-sm transition-colors',
                 'hover:border-green-400 hover:bg-green-50 hover:text-green-500',
               )}>
@@ -56,9 +55,9 @@ export const WalletMenu = () => {
       ) : (
         <Button
           variant='outline'
-          className='inline-flex h-[38px] w-[72px] items-center justify-center rounded-2xl border border-blue-300 bg-white px-3 py-4 shadow-sm transition-colors hover:border-blue-400'
+          className='inline-flex h-[38px] w-fit items-center justify-center rounded-2xl border border-blue-500 bg-white px-3 py-4 text-sm text-blue-500 shadow-sm transition-colors hover:border-blue-400'
           onClick={connectWallet}>
-          <WalletIcon />
+          Connect TON
         </Button>
       )}
     </>

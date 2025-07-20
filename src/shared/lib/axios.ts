@@ -7,7 +7,7 @@ class Gateway {
 
   constructor() {
     this.configs = {
-      ton: { baseURL: 'https://tonapi.io/v2' },
+      ton: { baseURL: 'https://testnet.tonapi.io/v2' },
       backendSwapCoffee: { baseURL: 'https://backend.swap.coffee/v1' },
     };
   }

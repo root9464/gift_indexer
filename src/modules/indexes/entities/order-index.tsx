@@ -1,4 +1,4 @@
-import { OrderIndexPopup } from './order-index-popup';
+import { OrderIndexPopup } from '../flows/order-index-popup';
 
 type OrderIndexProps = {
   icon: string;

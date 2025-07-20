@@ -1,14 +1,13 @@
 import { useWalletInfo } from '@/shared/hooks/api/useWalletInfo';
 import { fromNano } from '@ton/core';
 import { useTonAddress } from '@tonconnect/ui-react';
-import { WalletMenu } from './wallet-menu';
 
 export const Header = () => {
   const address = useTonAddress();
   const { data: walletInfo } = useWalletInfo(address ?? '');
   return (
-    <div className='flex items-center justify-between gap-2'>
-      <div className='inline-flex w-[calc(100%-80px)] items-center justify-center rounded-2xl border border-gray-300 bg-white px-3 py-2 shadow-xs'>
+    <div className='flex items-center justify-center gap-2'>
+      <div className='inline-flex w-fit items-center justify-center rounded-2xl border border-gray-300 bg-white px-3 py-2 shadow-xs'>
         <div className='mr-2 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-500'>
           <span className='text-xs font-bold text-white'>T</span>
         </div>
@@ -20,7 +19,6 @@ export const Header = () => {
           <span className='text-sm font-bold whitespace-nowrap text-orange-500'>🎁 N*</span>
         </div>
       </div>
-      <WalletMenu />
     </div>
   );
 };

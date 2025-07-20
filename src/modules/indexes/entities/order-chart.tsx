@@ -11,7 +11,7 @@ type OHLCV = {
   volume: number;
 };
 
-type OrderChartProps = Extend<OHLCV, { date: string }>;
+export type OrderChartProps = Extend<OHLCV, { date: string }>;
 
 const chartConfig = {
   desktop: {

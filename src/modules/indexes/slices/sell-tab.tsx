@@ -8,6 +8,7 @@ import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod/v4';
 import { makeBid } from '../funcs/bid';
+import { formatToExponential } from '../utils/utils';
 
 const OrderInputShema = z.object({
   amount: z.number().min(10, { message: 'Amount must be greater than 10' }),
@@ -33,8 +34,9 @@ export const SellTab = () => {
   const address = useTonAddress();
   const { data: jettons, isSuccess: isJettonsSuccess, isLoading: isJettonsLoading } = useJettonWallet({ address: address ?? '' });
 
-  const soxJetton = jettons?.find((balance) => balance.jetton.symbol === 'TSOXO');
-  const soxJettonAddress = soxJetton ? Address.parse(soxJetton.wallet_address.address).toString() : null;
+  const soxoJetton = jettons?.find((balance) => balance.jetton.symbol === 'TSOXO');
+  const soxoBalance = Number(soxoJetton?.balance) * 10 ** (soxoJetton?.jetton.decimals ?? 0);
+  const soxJettonAddress = soxoJetton ? Address.parse(soxoJetton.wallet_address.address).toString() : null;
 
   const onSubmit = (data: OrderInputShemaType) => {
     if (!soxJettonAddress || !address) return;
@@ -46,7 +48,7 @@ export const SellTab = () => {
 
   return (
     <TabsContent value='sell' className='flex h-full min-h-[230px] w-full flex-col gap-3'>
-      <div className='mt-3 text-xs font-medium text-gray-500'>BALANCE •N* SOXO</div>
+      <div className='mt-3 text-xs font-medium text-gray-500'>BALANCE •{formatToExponential(soxoBalance)} SOXO</div>
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-1.5'>
         <div className={cn('relative rounded-xl border-2 p-2.5', errors.amount ? 'border-red-500' : 'border-blue-500')}>
           <label className={cn('absolute -top-2 left-4 bg-white px-1 text-xs font-medium', errors.amount ? 'text-red-500' : 'text-blue-500')}>

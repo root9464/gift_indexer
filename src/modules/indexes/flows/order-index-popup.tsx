@@ -8,11 +8,11 @@ import { OrderChartWithTimeFrame } from '../features/order-chart-time-frame';
 
 import { OrderChart } from '../entities/order-chart';
 import { IndexesSubpageTabs } from '../features/indexes-subpage-tabs';
-import { AllOrders } from '../slices/all-orders';
 import { IndexesActionTabs } from './indexes-actions.tabs';
 
+import { INDEXES_MOCK } from '@/shared/mocks/indexes';
 import ChartDataMock from '@/shared/mocks/indexes-chart.json';
-import IndexesMock from '@shared/mocks/indexes.json';
+import { OrderTabFlow } from '../slices/orders-tab';
 
 type OrderIndexPopupProps = {
   trigger: React.ReactNode;
@@ -28,9 +28,9 @@ export function OrderIndexPopup({ trigger }: OrderIndexPopupProps) {
           <div className='flex h-fit w-full flex-col gap-2'>
             <div className='mb-2 ml-3 text-xs text-gray-500'>Price Dynamic</div>
             <OrderChartWithTimeFrame initialData={ChartDataMock} Chart={OrderChart} />
-            <OrderIndexInfo {...IndexesMock[0]} />
+            <OrderIndexInfo {...INDEXES_MOCK[0]} />
           </div>
-          <IndexesSubpageTabs trade={<IndexesActionTabs />} order={<AllOrders />} />
+          <IndexesSubpageTabs trade={<IndexesActionTabs />} order={<OrderTabFlow />} />
         </div>
       </DrawerContent>
     </Drawer>

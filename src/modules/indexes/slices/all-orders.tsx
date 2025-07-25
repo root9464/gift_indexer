@@ -2,12 +2,12 @@ type Order = {
   total_amount: number;
 };
 
-const AllOrdersHeader = ({ total_amount }: Order) => (
+export const AllOrdersHeader = ({ total_amount }: Order) => (
   <div className='flex items-center justify-between'>
     <div className='text-xs font-medium text-gray-700'>Order book • {total_amount} Sellers</div>
-    <div className='flex items-center gap-1 text-xs font-medium text-blue-500'>
+    {/* <div className='flex items-center gap-1 text-xs font-medium text-blue-500'>
       My orders<div className='h-1.5 w-1.5 rounded-full bg-blue-500'></div>
-    </div>
+    </div> */}
   </div>
 );
 
@@ -18,7 +18,7 @@ type OrderItemProps = {
   price: number;
 };
 
-const OrderItem = ({ symbol, address, amount, price }: OrderItemProps) => {
+export const OrderItem = ({ symbol, address, amount, price }: OrderItemProps) => {
   const sliceAddress = address.slice(0, 10) + '...' + address.slice(-10);
   return (
     <div className='flex items-center justify-between border-b border-gray-100 py-3'>

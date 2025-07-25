@@ -26,3 +26,5 @@ export const useUsdt = (addresses: string[]) =>
     },
     enabled: !!addresses && addresses.length > 0,
   });
+
+export type { TokenPrices };

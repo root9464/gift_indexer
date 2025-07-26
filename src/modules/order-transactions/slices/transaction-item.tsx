@@ -3,33 +3,39 @@ import { cn } from '@/shared/lib/utils';
 type TransactionItemProps = {
   title: string;
   price: number;
+  amount: number;
   time: string;
+  icon: string;
   type: 'buy' | 'sell' | 'cancel';
 };
 
-export const TransactionItem = ({ title, price, time, type }: TransactionItemProps) => {
+export const TransactionItem = ({ title, price, amount, time, icon, type }: TransactionItemProps) => {
   return (
-    <div className='flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3'>
-      <div className='flex min-w-0 flex-1 items-center'>
-        <div
-          className={cn(
-            'mr-3 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full',
-            type === 'buy' ? 'bg-green-100 text-green-600' : type === 'sell' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-600',
-          )}>
-          <span className='text-sm font-bold'>{type === 'buy' ? '+' : type === 'sell' ? '-' : 'X'}</span>
-        </div>
-        <div className='flex min-w-0 flex-1 flex-col gap-2'>
-          <div className='truncate text-sm font-medium text-gray-900'>{title}</div>
-          <div className='text-xs text-gray-500'>{time}</div>
-        </div>
+    <div className='grid w-full grid-cols-[48px_2fr_1fr] items-center justify-between gap-4 rounded-xl px-4 py-2.5'>
+      <img className='flex size-[48px] flex-1 items-center rounded-full' src={icon} alt={title} />
+      <div className='flex w-full grow flex-col'>
+        <p className='font-medium'>
+          <span className={cn('text-[17px]', type === 'buy' ? 'text-[#34C759]' : type === 'sell' ? 'text-[#FF3B30]' : 'text-gray-600')}>
+            {type === 'buy' ? 'Buy' : type === 'sell' ? 'Sell' : 'Cancel'}
+          </span>{' '}
+          · {amount}
+        </p>
+        <p className='text-[15px] text-[#707579]'>{time}</p>
       </div>
-      <div
-        className={cn(
-          'ml-3 flex-shrink-0 text-sm font-semibold',
-          type === 'buy' ? 'text-green-600' : type === 'sell' ? 'text-red-600' : 'text-gray-600',
-        )}>
-        {price > 0 ? '+' : '-'}${Math.abs(price)}
+      <div className='flex w-full flex-col place-items-end gap-0.5'>
+        <p className='text-[17px]'>${price}</p>
+        <p className={cn('text-[15px]', type === 'buy' ? 'text-[#34C759]' : type === 'sell' ? 'text-[#FF3B30]' : 'text-gray-600')}>USDT</p>
       </div>
     </div>
   );
 };
+
+{
+  /* <div
+  className={cn(
+    'ml-3 flex-shrink-0 text-sm font-semibold',
+    type === 'buy' ? 'text-green-600' : type === 'sell' ? 'text-red-600' : 'text-gray-600',
+  )}>
+  {price > 0 ? '+' : '-'}${Math.abs(price)}
+</div>; */
+}

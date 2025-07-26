@@ -5,7 +5,8 @@ const INDEXES_MOCK = [
     title: 'Market Cap Index',
     mcap: 80280433,
     price: 804.2,
-    change: 30.24,
+    change_price: 30.24,
+    type: 'up',
   },
 ];
 

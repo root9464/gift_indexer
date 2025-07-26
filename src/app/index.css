@@ -128,3 +128,10 @@
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   }
 }
+
+@custom-variant max-h-680 (@media (max-height: 680px));
+@custom-variant @max-h-680 {
+  @media (max-height: 680px) {
+    @slot;
+  }
+}

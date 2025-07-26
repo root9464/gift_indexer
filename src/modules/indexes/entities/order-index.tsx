@@ -5,10 +5,10 @@ type OrderIndexProps = {
   title: string;
   mcap: number;
   price: number;
-  change: number;
+  change_price: number;
 };
 
-export const OrderIndex = ({ icon, title, mcap, price, change }: OrderIndexProps) => {
+export const OrderIndex = ({ icon, title, mcap, price, change_price }: OrderIndexProps) => {
   return (
     <OrderIndexPopup
       trigger={
@@ -22,7 +22,7 @@ export const OrderIndex = ({ icon, title, mcap, price, change }: OrderIndexProps
           </div>
           <div className='ml-4 flex-shrink-0 text-right'>
             <div className='text-lg font-semibold text-gray-900'>${price}</div>
-            <div className='text-sm font-medium text-green-500'>{change}%</div>
+            <div className='text-sm font-medium text-green-500'>{change_price}%</div>
           </div>
         </div>
       }

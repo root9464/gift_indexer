@@ -1,4 +1,3 @@
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useJettonWallet } from '@/shared/hooks/api/useJettonWallet';
 import { useUsdt } from '@/shared/hooks/api/useUsdt';
 import { Address } from '@ton/core';
@@ -23,18 +22,8 @@ export const Balance = () => {
       : 0;
 
   return (
-    <div>
-      <div className='flex items-center justify-center gap-2 text-sm font-bold text-gray-500'>
-        <div className='text-4xl font-bold text-gray-800'>$ {totalBalance.toFixed(2) ?? 0}</div>
-        <div className='flex size-4 items-center justify-center rounded-full bg-gray-300'>
-          <Tooltip>
-            <TooltipTrigger>!</TooltipTrigger>
-            <TooltipContent tooltipClassName='bg-gray-200 fill-gray-200' className='bg-gray-200 text-gray-500' side='right'>
-              <p>Может быть погрешность в балансе</p>
-            </TooltipContent>
-          </Tooltip>
-        </div>
-      </div>
+    <div className='flex items-center justify-center gap-2 text-sm font-bold text-gray-500'>
+      <div className='text-4xl font-bold text-gray-800'>$ {totalBalance.toFixed(2) ?? 0}</div>
     </div>
   );
 };

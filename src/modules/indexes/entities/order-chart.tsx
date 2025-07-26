@@ -72,7 +72,7 @@ export const OrderChart = ({ chartData }: { chartData: OrderChartProps[] }) => {
           <defs>
             <linearGradient id='priceGradient' x1='0' y1='0' x2='0' y2='1'>
               <stop offset='0%' stopColor='#10b981' stopOpacity={0.3} />
-              <stop offset='100%' stopColor='#10b981' stopOpacity={0.05} />
+              <stop offset='100%' stopColor='#ffffff' stopOpacity={0.05} />
             </linearGradient>
             <linearGradient id='lineGradient' x1='0' y1='0' x2='1' y2='0'>
               <stop offset='0%' stopColor='#059669' />
@@ -117,8 +117,8 @@ export const OrderChart = ({ chartData }: { chartData: OrderChartProps[] }) => {
             type='monotone'
             dataKey='close'
             stroke={chartConfig.desktop.color}
-            fill={chartConfig.desktop.color}
-            fillOpacity={0.1}
+            fill='url(#priceGradient)'
+            fillOpacity={1}
             strokeWidth={1}
             activeDot={{
               r: 5,

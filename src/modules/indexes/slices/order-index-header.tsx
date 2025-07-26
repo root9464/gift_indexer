@@ -4,10 +4,9 @@ import { XIcon } from 'lucide-react';
 type OrderIndexHeaderProps = {
   price: number;
   change: number;
-  lastPrice: number;
 };
 
-export const OrderIndexHeader = ({ price, change, lastPrice }: OrderIndexHeaderProps) => {
+export const OrderIndexHeader = ({ price, change }: OrderIndexHeaderProps) => {
   return (
     <DrawerHeader className='relative flex flex-col'>
       <DrawerTitle className='-ml-3 flex flex-row items-center gap-2'>
@@ -18,10 +17,7 @@ export const OrderIndexHeader = ({ price, change, lastPrice }: OrderIndexHeaderP
         </div>
         <span className='rounded-lg bg-red-100 px-2 py-1 text-xs font-medium text-red-500'>{change}%</span>
       </DrawerTitle>
-      <DrawerDescription className='flex flex-row items-center gap-2'>
-        <span className='text-xs text-gray-500'>Last Price</span>
-        <span className='text-xs text-gray-500'>${lastPrice}</span>
-      </DrawerDescription>
+      <DrawerDescription className='hidden' />
 
       <DrawerClose className='absolute top-4 right-4'>
         <XIcon className='h-4 w-4 text-gray-500' />

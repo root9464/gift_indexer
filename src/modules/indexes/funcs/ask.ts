@@ -18,7 +18,7 @@ const makeAsk = (amount: number, jetton_address: string) => {
 
   const message = {
     validUntil: Math.round(Date.now() / 1000) + 60 * 5,
-    network: CHAIN.TESTNET,
+    network: CHAIN.MAINNET,
     messages: [
       {
         address: jetton_address,

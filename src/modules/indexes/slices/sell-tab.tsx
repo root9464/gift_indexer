@@ -9,6 +9,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod/v4';
 import { makeBid } from '../funcs/bid';
 import { formatToExponential } from '../utils/utils';
+import type { FC } from 'react';
+import { useOrderBookPair } from '../hooks/api/useOrderBookPair';
 
 const OrderInputShema = z.object({
   amount: z.number().min(10, { message: 'Amount must be greater than 10' }),
@@ -16,7 +18,16 @@ const OrderInputShema = z.object({
 
 type OrderInputShemaType = z.infer<typeof OrderInputShema>;
 
-export const SellTab = () => {
+type SellTabProps = {
+  order_book_address: string;
+}
+
+export const SellTab: FC<SellTabProps> = ({order_book_address}) => {
+
+   const { data: OrderBookInfo } = useOrderBookPair(order_book_address);
+
+   const orderBookAddress = OrderBookInfo && OrderBookInfo?.stack.length > 0 ? OrderBookInfo.stack[3].cell : ''
+
   const {
     register,
     handleSubmit,
@@ -34,7 +45,7 @@ export const SellTab = () => {
   const address = useTonAddress();
   const { data: jettons, isSuccess: isJettonsSuccess, isLoading: isJettonsLoading } = useJettonWallet({ address: address ?? '' });
 
-  const soxoJetton = jettons?.find((balance) => balance.jetton.symbol === 'TSOXO');
+  const soxoJetton = jettons?.find((balance) => balance.jetton.address === Address.parse(orderBookAddress).toString());
   const soxoBalance = Number(soxoJetton?.balance) * 10 ** (soxoJetton?.jetton.decimals ?? 0);
   const soxJettonAddress = soxoJetton ? Address.parse(soxoJetton.wallet_address.address).toString() : null;
 

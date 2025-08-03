@@ -7,6 +7,7 @@ const INDEXES_MOCK = [
     price: 804.2,
     change_price: 30.24,
     type: 'up',
+    order_book_address: ''
   },
 ];
 

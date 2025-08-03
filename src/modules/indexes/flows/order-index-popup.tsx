@@ -13,12 +13,21 @@ import { IndexesActionTabs } from './indexes-actions.tabs';
 import { INDEXES_MOCK } from '@/shared/mocks/indexes';
 import ChartDataMock from '@/shared/mocks/indexes-chart.json';
 import { OrderTabFlow } from '../slices/orders-tab';
+import { useQueryClient } from '@tanstack/react-query';
+import type { OrderBook } from '../hooks/api/useOrder';
 
 type OrderIndexPopupProps = {
   trigger: React.ReactNode;
+  icon: string;
+  title: string;
+  mcap: number;
+  price: number;
+  change_price: number;
+  type: string
+  order_book_address: string
 };
 
-export function OrderIndexPopup({ trigger }: OrderIndexPopupProps) {
+export function OrderIndexPopup({ trigger, title, price, change_price, mcap, type, order_book_address }: OrderIndexPopupProps) {
   return (
     <Drawer>
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
@@ -28,9 +37,16 @@ export function OrderIndexPopup({ trigger }: OrderIndexPopupProps) {
           <div className='flex flex-col gap-2'>
             <div className='flex h-fit w-full flex-col gap-2'>
               <OrderChartWithTimeFrame initialData={ChartDataMock} Chart={OrderChart} />
-              <OrderIndexInfo {...(INDEXES_MOCK[0] as OrderIndexInfoProps)} />
+                <OrderIndexInfo 
+                change_price={change_price}
+                mcap={mcap}
+                price={price}
+                title={title}
+                type={type as "up" | "down"}
+                key={title}
+                />
             </div>
-            <IndexesSubpageTabs trade={<IndexesActionTabs />} order={<OrderTabFlow />} />
+            <IndexesSubpageTabs trade={<IndexesActionTabs order_book_address={order_book_address}/>} order={<OrderTabFlow />} />
           </div>
         </div>
       </DrawerContent>

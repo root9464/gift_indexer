@@ -1,20 +1,14 @@
 import * as React from 'react';
-
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
-import { OrderIndexInfo, type OrderIndexInfoProps } from '../slices/oder-index-info';
+import { OrderIndexInfo } from '../slices/oder-index-info';
 import { OrderIndexHeader } from '../slices/order-index-header';
-
 import { OrderChartWithTimeFrame } from '../features/order-chart-time-frame';
-
 import { OrderChart } from '../entities/order-chart';
 import { IndexesSubpageTabs } from '../features/indexes-subpage-tabs';
 import { IndexesActionTabs } from './indexes-actions.tabs';
-
-import { INDEXES_MOCK } from '@/shared/mocks/indexes';
 import ChartDataMock from '@/shared/mocks/indexes-chart.json';
 import { OrderTabFlow } from '../slices/orders-tab';
-import { useQueryClient } from '@tanstack/react-query';
-import type { OrderBook } from '../hooks/api/useOrder';
+
 
 type OrderIndexPopupProps = {
   trigger: React.ReactNode;

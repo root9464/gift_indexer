@@ -1,4 +1,4 @@
-import { Address, beginCell, Dictionary, type DictionaryValue } from '@ton/core';
+import { Address, beginCell, Cell, Dictionary, type DictionaryValue } from '@ton/core';
 
 type orderInfoType = {
   orderAmount: bigint;
@@ -42,5 +42,11 @@ function getAddress(addressUint: bigint): Address {
   return beginCell().storeUint(2, 2).storeUint(0, 1).storeUint(0, 8).storeUint(addressUint, 256).endCell().beginParse().loadAddress();
 }
 
-export { asksBidsDictionaryValue, getAddress, orderDictionaryValue };
+function loadAddressFromCell(cell: Cell): Address {
+  const slice = cell.beginParse();
+  const address = slice.loadAddress();
+  return address;
+}
+
+export { asksBidsDictionaryValue, getAddress, loadAddressFromCell, orderDictionaryValue };
 export type { asksBidsInfoType, orderInfoType };

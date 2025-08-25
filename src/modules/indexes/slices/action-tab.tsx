@@ -5,31 +5,33 @@ import { cn } from '@/shared/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Address } from '@ton/core';
 import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
+import type { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod/v4';
 import { makeAsk } from '../funcs/ask';
+import { makeBid } from '../funcs/bid';
 import { formatToExponential } from '../utils/utils';
-import type { FC } from 'react';
-import { useOrderBookPair } from '../hooks/api/useOrderBookPair';
+
+type Action = 'buy' | 'sell';
+
+type Addresses = {
+  book_address: string;
+  usdt_master_address: string;
+  index_master_address: string;
+};
+
+type ActionTabProps = {
+  action: Action;
+  addresses: Addresses;
+};
 
 const OrderInputShema = z.object({
-  amount: z.number().min(10, { message: 'Amount must be greater than 10' }),
+  amount: z.number().min(1, { message: 'Amount must be greater than 1' }),
 });
 
 type OrderInputShemaType = z.infer<typeof OrderInputShema>;
 
-type BuyTabProps = {
-  order_book_address: string;
-}
-
-export const BuyTab: FC<BuyTabProps> = ({order_book_address}) => {
-
-  const { data: OrderBookInfo } = useOrderBookPair(order_book_address);
-  console.log(OrderBookInfo)
-
-
-  const orderBookAddress = OrderBookInfo && OrderBookInfo?.stack.length > 0 ? OrderBookInfo.stack[4].cell : ''
-
+export const ActionTab: FC<ActionTabProps> = ({ action, addresses }) => {
   const {
     register,
     handleSubmit,
@@ -44,29 +46,51 @@ export const BuyTab: FC<BuyTabProps> = ({order_book_address}) => {
   });
 
   const [tonConnectUI] = useTonConnectUI();
-
   const address = useTonAddress();
   const { data: jettons, isSuccess: isJettonsSuccess, isLoading: isJettonsLoading } = useJettonWallet({ address: address ?? '' });
 
-  const tusdtJetton = jettons?.find((balance) => balance.jetton.address === Address.parse(orderBookAddress).toString());
-  const tusdtBalance = Number(tusdtJetton?.balance) * 10 ** (tusdtJetton?.jetton.decimals ?? 0);
-  const jettonAddress = tusdtJetton ? Address.parse(tusdtJetton.wallet_address.address).toString() : null;
+  const usdtUserJetton = jettons?.find((balance) => Address.parse(balance.jetton.address).toString() === addresses.usdt_master_address);
+  console.log(usdtUserJetton, 'usdtUserJetton');
 
-  const onSubmit = (data: OrderInputShemaType) => {
-    if (!jettonAddress || !address) return;
-    const askMessage = makeAsk(data.amount, jettonAddress);
-    tonConnectUI.sendTransaction(askMessage);
+  const indexUserJetton = jettons?.find((balance) => Address.parse(balance.jetton.address).toString() === addresses.index_master_address);
+
+  const usdtUserJettonBalance = Number(usdtUserJetton?.balance) * 10 ** (usdtUserJetton?.jetton.decimals ?? 0);
+  const indexUserJettonBalance = Number(indexUserJetton?.balance) * 10 ** (indexUserJetton?.jetton.decimals ?? 0);
+
+  const currentBalance = action === 'buy' ? usdtUserJettonBalance : indexUserJettonBalance;
+
+  const onSubmit = async (data: OrderInputShemaType) => {
+    if (action === 'buy') {
+      if (!usdtUserJetton) throw new Error('USDT jetton not found');
+      const askMessage = await makeAsk({
+        amount: data.amount,
+        order_book_master: addresses.book_address,
+        jetton_address: Address.parse(usdtUserJetton.wallet_address.address).toString(),
+        decimal: usdtUserJetton.jetton.decimals,
+      });
+      tonConnectUI.sendTransaction(askMessage);
+    } else {
+      if (!indexUserJetton) throw new Error('Index jetton not found');
+      const bidMessage = await makeBid({
+        amount: data.amount,
+        order_book_master: addresses.book_address,
+        jetton_address: addresses.index_master_address,
+        decimal: indexUserJetton.jetton.decimals,
+      });
+      tonConnectUI.sendTransaction(bidMessage);
+    }
   };
 
   const amount = watch('amount');
 
   return (
-    <TabsContent value='buy' className='flex h-full min-h-[230px] w-full flex-col gap-3'>
-      <div className='mt-3 text-xs font-medium text-gray-500'>BALANCE •{formatToExponential(tusdtBalance)} USDT</div>
+    <TabsContent value={action} className='flex h-full min-h-[230px] w-full flex-col gap-3'>
+      <div className='mt-3 text-xs font-medium text-gray-500'>BALANCE • {formatToExponential(currentBalance)}</div>
+
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-1.5'>
         <div className={cn('relative rounded-xl border-2 p-2.5', errors.amount ? 'border-red-500' : 'border-blue-500')}>
           <label className={cn('absolute -top-2 left-4 bg-white px-1 text-xs font-medium', errors.amount ? 'text-red-500' : 'text-blue-500')}>
-            Your order
+            {action === 'buy' ? 'Your order' : 'Your sell'}
           </label>
           <input
             placeholder='Buy tokens'
@@ -87,9 +111,8 @@ export const BuyTab: FC<BuyTabProps> = ({order_book_address}) => {
           {isJettonsSuccess && (
             <button
               type='submit'
-              disabled={isJettonsLoading}
               className='h-8 w-full rounded-xl bg-blue-500 px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-blue-600'>
-              Buy for {amount || 4.24} USDT
+              {action === 'buy' ? 'Buy' : 'Sell'} for {amount || 4.24} USDT
             </button>
           )}
           {isJettonsLoading && <Skeleton className='h-8 w-full rounded-xl' />}

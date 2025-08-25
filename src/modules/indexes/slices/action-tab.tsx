@@ -8,8 +8,8 @@ import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
 import type { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod/v4';
-import { makeAsk } from '../funcs/ask';
-import { makeBid } from '../funcs/bid';
+import { makeAskBid } from '../funcs/ask-bid';
+import { useSeqno } from '../hooks/api/useSeqno';
 import { formatToExponential } from '../utils/utils';
 
 type Action = 'buy' | 'sell';
@@ -48,13 +48,12 @@ export const ActionTab: FC<ActionTabProps> = ({ action, addresses }) => {
   const [tonConnectUI] = useTonConnectUI();
   const address = useTonAddress();
   const { data: jettons, isSuccess: isJettonsSuccess, isLoading: isJettonsLoading } = useJettonWallet({ address: address ?? '' });
+  const { data: Seqno, isSuccess: isSeqnoSuccess } = useSeqno(addresses.book_address);
 
   const usdtUserJetton = jettons?.find((balance) => Address.parse(balance.jetton.address).toString() === addresses.usdt_master_address);
-  console.log(usdtUserJetton, 'usdtUserJetton');
+  const usdtUserJettonBalance = Number(usdtUserJetton?.balance) * 10 ** (usdtUserJetton?.jetton.decimals ?? 0);
 
   const indexUserJetton = jettons?.find((balance) => Address.parse(balance.jetton.address).toString() === addresses.index_master_address);
-
-  const usdtUserJettonBalance = Number(usdtUserJetton?.balance) * 10 ** (usdtUserJetton?.jetton.decimals ?? 0);
   const indexUserJettonBalance = Number(indexUserJetton?.balance) * 10 ** (indexUserJetton?.jetton.decimals ?? 0);
 
   const currentBalance = action === 'buy' ? usdtUserJettonBalance : indexUserJettonBalance;
@@ -62,7 +61,8 @@ export const ActionTab: FC<ActionTabProps> = ({ action, addresses }) => {
   const onSubmit = async (data: OrderInputShemaType) => {
     if (action === 'buy') {
       if (!usdtUserJetton) throw new Error('USDT jetton not found');
-      const askMessage = await makeAsk({
+      const askMessage = await makeAskBid({
+        seqno: isSeqnoSuccess ? Seqno : 0,
         amount: data.amount,
         order_book_master: addresses.book_address,
         jetton_address: Address.parse(usdtUserJetton.wallet_address.address).toString(),
@@ -71,10 +71,11 @@ export const ActionTab: FC<ActionTabProps> = ({ action, addresses }) => {
       tonConnectUI.sendTransaction(askMessage);
     } else {
       if (!indexUserJetton) throw new Error('Index jetton not found');
-      const bidMessage = await makeBid({
+      const bidMessage = await makeAskBid({
+        seqno: isSeqnoSuccess ? Seqno : 0,
         amount: data.amount,
         order_book_master: addresses.book_address,
-        jetton_address: addresses.index_master_address,
+        jetton_address: Address.parse(indexUserJetton.wallet_address.address).toString(),
         decimal: indexUserJetton.jetton.decimals,
       });
       tonConnectUI.sendTransaction(bidMessage);

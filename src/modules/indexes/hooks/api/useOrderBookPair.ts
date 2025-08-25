@@ -1,5 +1,5 @@
 import { gateway } from '@/shared/lib/axios';
-import type { SmartContractMethodResponse } from '@/shared/types/ton-api';
+import type { SmartContractCellsMethodResponse } from '@/shared/types/ton-api';
 import { useQuery } from '@tanstack/react-query';
 import { Cell } from '@ton/core';
 import { loadAddressFromCell } from '../../helpers/parse-order-book';
@@ -16,7 +16,7 @@ export const useOrderBookPair = (order_book_address: string) =>
   useQuery({
     queryKey: ['OrderBookPair'],
     queryFn: async () => {
-      const { data } = await gateway.instance.ton.get<SmartContractMethodResponse>(
+      const { data } = await gateway.instance.ton.get<SmartContractCellsMethodResponse>(
         `/blockchain/accounts/${order_book_address}/methods/get_order_book_addresses`,
       );
 

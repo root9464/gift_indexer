@@ -1,11 +1,31 @@
-import { ORDER_TRANSACTIONS_MOCK } from '@/shared/mocks/order-transactions';
+import { useTonAddress } from '@tonconnect/ui-react';
+import { useOrder } from '../indexes/hooks/api/useOrder';
+import { filterTxHistoryByRecipients } from './helpers/filter-tx';
+import { useTransaction } from './hooks/api/useTransactions';
 import { TransactionItem } from './slices/transaction-item';
 
 export const OrderTransactionsModule = () => {
+  const address = useTonAddress();
+  const { data: OrderBooks } = useOrder();
+  const {
+    data: transactions,
+    isSuccess: isSuccessTransactions,
+    isLoading: isLoadingTransactions,
+    isError: isErrorTransactions,
+  } = useTransaction(address);
+
+  const orderBookAddresses = OrderBooks?.map((orderBook) => orderBook.order_book_address);
+  const serializedTransactions = filterTxHistoryByRecipients(transactions!, orderBookAddresses ?? []);
+
+  console.log(orderBookAddresses, 'orderBookAddresses');
+
+  console.log(transactions, 'transactions');
+  console.log(serializedTransactions, 'serializedTransactions');
+
   return (
     <div className='flex flex-col gap-6 py-2'>
       <div className='space-y-3'>
-        {ORDER_TRANSACTIONS_MOCK.map((transaction) => (
+        {serializedTransactions.map((transaction) => (
           <TransactionItem
             key={transaction.title}
             title={transaction.title}

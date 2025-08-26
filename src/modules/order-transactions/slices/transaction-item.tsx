@@ -1,10 +1,10 @@
 import { cn } from '@/shared/lib/utils';
 
-type TransactionItemProps = {
+export type TransactionItemProps = {
   title: string;
   price: number;
   amount: number;
-  time: string;
+  time: number;
   icon: string;
   type: 'buy' | 'sell' | 'cancel';
 };
@@ -29,13 +29,3 @@ export const TransactionItem = ({ title, price, amount, time, icon, type }: Tran
     </div>
   );
 };
-
-{
-  /* <div
-  className={cn(
-    'ml-3 flex-shrink-0 text-sm font-semibold',
-    type === 'buy' ? 'text-green-600' : type === 'sell' ? 'text-red-600' : 'text-gray-600',
-  )}>
-  {price > 0 ? '+' : '-'}${Math.abs(price)}
-</div>; */
-}

@@ -16,9 +16,6 @@ const isValidOrderBookInfo = (data: unknown): data is OrderBookAddresses => {
 
 export const IndexesActionTabs: FC<IndexesActionTabsProps> = ({ order_book_address }) => {
   const { data: OrderBookInfo, isSuccess: isOrderBookInfoSuccess } = useOrderBookPair(order_book_address);
-  console.log(OrderBookInfo, 'OrderBookInfo');
-  console.log(order_book_address, 'order_book_address');
-
   return (
     <Tabs defaultValue='buy' className='w-full'>
       <TabsList className='h-8 w-full rounded-[.5rem] p-0.5 *:rounded-[.375rem] *:text-xs'>

@@ -1,3 +1,4 @@
+import { Skeleton } from '@/components/ui/skeleton';
 import { useTonAddress } from '@tonconnect/ui-react';
 import { useOrder } from '../indexes/hooks/api/useOrder';
 import { filterTxHistoryByRecipients } from './helpers/filter-tx';
@@ -17,25 +18,23 @@ export const OrderTransactionsModule = () => {
   const orderBookAddresses = OrderBooks?.map((orderBook) => orderBook.order_book_address);
   const serializedTransactions = filterTxHistoryByRecipients(transactions!, orderBookAddresses ?? []);
 
-  console.log(orderBookAddresses, 'orderBookAddresses');
-
-  console.log(transactions, 'transactions');
-  console.log(serializedTransactions, 'serializedTransactions');
-
   return (
     <div className='flex flex-col gap-6 py-2'>
-      <div className='space-y-3'>
-        {serializedTransactions.map((transaction) => (
-          <TransactionItem
-            key={transaction.title}
-            title={transaction.title}
-            price={transaction.price}
-            time={transaction.time}
-            icon={transaction.icon}
-            amount={transaction.amount}
-            type={transaction.type as 'buy' | 'sell' | 'cancel'}
-          />
-        ))}
+      <div className='max-h-[500px] space-y-3 overflow-auto'>
+        {isSuccessTransactions &&
+          serializedTransactions.map((transaction) => (
+            <TransactionItem
+              key={transaction.title}
+              title={transaction.title}
+              price={transaction.price}
+              time={transaction.time}
+              icon={transaction.icon}
+              amount={transaction.amount}
+              type={transaction.type as 'buy' | 'sell' | 'cancel'}
+            />
+          ))}
+
+        {(isErrorTransactions || isLoadingTransactions) && <Skeleton className='h-[500px] w-full' />}
       </div>
     </div>
   );

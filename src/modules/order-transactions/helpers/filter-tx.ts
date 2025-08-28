@@ -31,7 +31,7 @@ const mapEventToTransactionItem = (event: Event, allow: Set<string>) => {
 
   return {
     title: simple_preview.description,
-    price: 0,
+    price: type === 'buy' ? numericAmount : 0,
     amount: numericAmount,
     time: event.timestamp,
     icon: jetton.image,

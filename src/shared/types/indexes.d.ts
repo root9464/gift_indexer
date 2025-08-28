@@ -5,3 +5,5 @@ export type BidAskParams = {
   jetton_address: string;
   decimal: number;
 };
+
+export type Action = 'bid' | 'ask';

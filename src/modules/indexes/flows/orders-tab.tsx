@@ -1,7 +1,13 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AllOrders, OrderItem } from './all-orders';
+import type { FC } from 'react';
+import { CancelOrder } from '../features/cancel-order';
+import { AllOrders, OrderItem } from '../slices/all-orders';
 
-export const OrderTabFlow = () => (
+type OrderTabFlowProps = {
+  order_book_address: string;
+};
+
+export const OrderTabFlow: FC<OrderTabFlowProps> = ({ order_book_address }) => (
   <Tabs defaultValue='orders' className='w-full'>
     <TabsList className='h-8 w-full rounded-[.5rem] p-0.5 *:rounded-[.375rem] *:text-xs'>
       <TabsTrigger value='orders'>Order books</TabsTrigger>
@@ -25,11 +31,7 @@ export const OrderTabFlow = () => (
             <span>Price will change in 2 h 49 m</span>
           </div>
         </div>
-        <button
-          type='submit'
-          className='h-[50px] w-full rounded-xl bg-blue-500 px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-blue-600'>
-          Cancel Order
-        </button>
+        <CancelOrder order_book_address={order_book_address} />
       </TabsContent>
     </div>
   </Tabs>

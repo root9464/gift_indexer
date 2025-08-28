@@ -1,9 +1,7 @@
-import type { BidAskParams } from '@/shared/types/indexes';
+import type { Action, BidAskParams } from '@/shared/types/indexes';
 import { Address, beginCell, toNano } from '@ton/core';
 import { mnemonicToPrivateKey, sign } from '@ton/crypto';
 import { CHAIN, type SendTransactionRequest } from '@tonconnect/ui-react';
-
-type Action = 'bid' | 'ask';
 
 const makeAskBid = async ({ seqno, amount, order_book_address, jetton_address, decimal }: BidAskParams, action: Action) => {
   const MNEMONICS = (import.meta.env.VITE_PUBLIC_ORDER_BOOK_ADMIN_MNEMONIC as string).split(' ');

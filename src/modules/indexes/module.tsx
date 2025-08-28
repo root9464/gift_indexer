@@ -9,9 +9,9 @@ export const IndexesModule = () => {
       <div className='text-xs font-semibold text-gray-500'>INDEXES</div>
       <div className='space-y-2'>
         {OrderBooks &&
-          OrderBooks.map((index) => (
+          OrderBooks.map((index, t) => (
             <OrderIndex
-              key={index.title}
+              key={t}
               icon={index.icon}
               title={index.title}
               mcap={index.mcap}

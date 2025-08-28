@@ -16,7 +16,7 @@ export const OrderTransactionsModule = () => {
   } = useTransaction(address);
 
   const orderBookAddresses = OrderBooks?.map((orderBook) => orderBook.order_book_address);
-  const serializedTransactions = filterTxHistoryByRecipients(transactions!, orderBookAddresses ?? []);
+  const serializedTransactions = filterTxHistoryByRecipients(transactions!, orderBookAddresses ?? [], 1);
 
   return (
     <div className='flex flex-col gap-6 py-2'>

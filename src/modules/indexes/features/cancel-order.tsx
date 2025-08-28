@@ -18,11 +18,7 @@ export const CancelOrder: FC<CancelOrderProps> = ({ order_book_address }) => {
   const { data: OrderQueues, isSuccess: isOrderQueuesSuccess } = useOrderQueues(order_book_address);
   const orderQueueCell = isOrderQueuesSuccess && OrderQueues ? Cell.fromHex(OrderQueues.stack[0].cell) : Cell.EMPTY;
   const orderParsedDict = parseOrderActionDict(orderQueueCell) ?? emptyParsedOrders;
-  console.log(orderParsedDict, 'orderParsedDict');
-
   const orderType = findOrderByAddress(orderParsedDict, address);
-  console.log(orderType);
-
   const handleCancelOrder = async () => {
     if (!isSeqnoSuccess) return;
     const message = await cancelAskBid(

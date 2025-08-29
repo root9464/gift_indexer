@@ -10,7 +10,6 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod/v4';
 import { makeAskBid } from '../funcs/ask-bid';
 import { useSeqno } from '../hooks/api/useSeqno';
-import { formatToExponential } from '../utils/utils';
 
 type Action = 'buy' | 'sell';
 
@@ -36,6 +35,7 @@ export const ActionTab: FC<ActionTabProps> = ({ action, addresses }) => {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<OrderInputShemaType>({
     resolver: zodResolver(OrderInputShema),
@@ -51,10 +51,10 @@ export const ActionTab: FC<ActionTabProps> = ({ action, addresses }) => {
   const { data: Seqno, isSuccess: isSeqnoSuccess } = useSeqno(addresses.book_address);
 
   const usdtUserJetton = jettons?.find((balance) => Address.parse(balance.jetton.address).toString() === addresses.usdt_master_address);
-  const usdtUserJettonBalance = Number(usdtUserJetton?.balance) * 10 ** (usdtUserJetton?.jetton.decimals ?? 0);
+  const usdtUserJettonBalance = Number(usdtUserJetton?.balance) / 10 ** (usdtUserJetton?.jetton.decimals ?? 0);
 
   const indexUserJetton = jettons?.find((balance) => Address.parse(balance.jetton.address).toString() === addresses.index_master_address);
-  const indexUserJettonBalance = Number(indexUserJetton?.balance) * 10 ** (indexUserJetton?.jetton.decimals ?? 0);
+  const indexUserJettonBalance = Number(indexUserJetton?.balance) / 10 ** (indexUserJetton?.jetton.decimals ?? 0);
 
   const currentBalance = action === 'buy' ? usdtUserJettonBalance : indexUserJettonBalance;
 
@@ -88,11 +88,25 @@ export const ActionTab: FC<ActionTabProps> = ({ action, addresses }) => {
     }
   };
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+
+    if (value === '') {
+      setValue('amount', 0, { shouldValidate: true });
+      return;
+    }
+
+    const numericValue = Number(value);
+    if (!isNaN(numericValue) && numericValue > 0) {
+      setValue('amount', numericValue, { shouldValidate: true });
+    }
+  };
+
   const amount = watch('amount');
 
   return (
     <TabsContent value={action} className='flex h-full min-h-[230px] w-full flex-col gap-3'>
-      <div className='mt-3 text-xs font-medium text-gray-500'>BALANCE • {formatToExponential(currentBalance)}</div>
+      <div className='mt-3 text-xs font-medium text-gray-500'>BALANCE • {currentBalance.toFixed(2)}</div>
 
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-1.5'>
         <div className={cn('relative rounded-xl border-2 p-2.5', errors.amount ? 'border-red-500' : 'border-blue-500')}>
@@ -103,7 +117,11 @@ export const ActionTab: FC<ActionTabProps> = ({ action, addresses }) => {
             placeholder='Buy tokens'
             type='number'
             className='w-full border-none bg-transparent text-sm text-gray-700 placeholder-gray-400 outline-none'
-            {...register('amount', { valueAsNumber: true })}
+            {...register('amount', {
+              onChange: handleInputChange,
+              max: currentBalance,
+              min: 1,
+            })}
           />
         </div>
         <p className='h-4 text-xs text-red-500'>{errors.amount?.message}</p>

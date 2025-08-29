@@ -1,13 +1,16 @@
 import { RouterProvider } from './router';
 import { TanstackProvider } from './tanstack';
+import { TmaProvider } from './tma';
 import { TonProvider } from './ton';
 
 export const GlobalProvider = () => {
   return (
     <TanstackProvider>
-      <TonProvider>
-        <RouterProvider />
-      </TonProvider>
+      <TmaProvider>
+        <TonProvider>
+          <RouterProvider />
+        </TonProvider>
+      </TmaProvider>
     </TanstackProvider>
   );
 };

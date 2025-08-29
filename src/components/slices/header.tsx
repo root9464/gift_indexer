@@ -1,4 +1,3 @@
-import { Skeleton } from '@/components/ui/skeleton';
 import { useTonBlanace } from '@/shared/hooks/api/useTonBalance';
 import { useLaunchParams } from '@telegram-apps/sdk-react';
 import { fromNano } from '@ton/core';
@@ -7,12 +6,7 @@ import { useTonAddress } from '@tonconnect/ui-react';
 export const Header = () => {
   const address = useTonAddress();
   const { tgWebAppData } = useLaunchParams();
-  const {
-    data: userBalance,
-    isSuccess: isUserBalanceSucess,
-    isError: isUserBalanceError,
-    isLoading: isUserBalanceLoading,
-  } = useTonBlanace(address);
+  const { data: userBalance, isSuccess: isUserBalanceSucess } = useTonBlanace(address ?? '');
 
   return (
     <div className='flex items-center justify-center gap-2'>
@@ -29,12 +23,13 @@ export const Header = () => {
         <div className='flex min-w-0 flex-1 items-center overflow-hidden'>
           <span className='text-sm font-bold whitespace-nowrap text-gray-700'>{tgWebAppData?.user?.first_name || 'Anonymous'}</span>
           <span className='mx-1 text-sm font-bold text-gray-700'>•</span>
-          {isUserBalanceSucess && (
+          {isUserBalanceSucess && userBalance?.balance > 0 ? (
             <span className='text-sm font-bold whitespace-nowrap text-gray-700'>
               {Number(fromNano(userBalance?.balance ?? 0n)).toFixed(2)} TON
             </span>
+          ) : (
+            <span className='text-sm font-bold whitespace-nowrap text-gray-700'>0 TON</span>
           )}
-          {(isUserBalanceLoading || isUserBalanceError) && <Skeleton className='size-2 rounded-full' />}
           <span className='mx-1 text-sm font-bold text-gray-700'>•</span>
           <span className='text-sm font-bold whitespace-nowrap text-orange-500'>🎁 N*</span>
         </div>

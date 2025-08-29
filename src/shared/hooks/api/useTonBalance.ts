@@ -12,11 +12,12 @@ type TONWallet = {
 
 const useTonBlanace = (address: string) =>
   useQuery({
-    queryKey: ['ton-balance'],
+    queryKey: ['ton-balance', address],
     queryFn: async () => {
       const { data } = await gateway.instance.ton.get<TONWallet>(`/accounts/${address}`);
       return data;
     },
+    enabled: !!address,
   });
 
 export { useTonBlanace };

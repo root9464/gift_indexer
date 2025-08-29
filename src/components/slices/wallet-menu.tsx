@@ -38,14 +38,20 @@ export const WalletMenu = () => {
             </div>
             <div className='flex w-full flex-col'>
               <DropdownMenuItem className='flex w-full items-center gap-2 rounded-none px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50'>
-                <CopyIcon className='stroke-gray-700' />
-                <Button variant='ghost' className='p-0 text-sm text-gray-700' onClick={() => copyClipboard(address)}>
+                <Button
+                  variant='ghost'
+                  className='flex w-full flex-row justify-start p-0 text-sm text-gray-700'
+                  onClick={() => copyClipboard(address)}>
+                  <CopyIcon className='stroke-gray-700' />
                   Copy address
                 </Button>
               </DropdownMenuItem>
               <DropdownMenuItem className='flex w-full items-center gap-2 rounded-none px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50'>
-                <DisconectIcon className='stroke-red-600' />
-                <Button variant='ghost' className='p-0 text-sm text-red-600 hover:bg-red-50 hover:text-red-600' onClick={disconnectWallet}>
+                <Button
+                  variant='ghost'
+                  className='flex w-full flex-row justify-start p-0 text-sm text-red-600 hover:bg-red-50 hover:text-red-600'
+                  onClick={disconnectWallet}>
+                  <DisconectIcon className='stroke-red-600' />
                   Disconnect
                 </Button>
               </DropdownMenuItem>
